@@ -1,11 +1,14 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from 'react'
-import ReactPlayer from 'react-player'
+import dynamic from 'next/dynamic'
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Play, Pause, Volume2, Maximize, Loader2, VolumeX } from "lucide-react" // Import icons
 import { cn } from "@/lib/utils"
+
+// Lazy load ReactPlayer to avoid Hydration Mismatch and use standard exports to fix ref forwarding
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 interface VideoPlayerProps {
     url?: string;
@@ -84,7 +87,6 @@ export function VideoPlayer({ url = DEMO_URL, onProgress, onDuration, isSyncing 
                     if (!seeking) setPlayed(state.played);
                     if (onProgress) onProgress(state);
                 }}
-                onDuration={onDuration}
                 controls={false} // We provide custom controls
                 config={{
                     youtube: { playerVars: { showinfo: 0, disablekb: 1 } }

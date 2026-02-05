@@ -2,16 +2,15 @@
 
 import {
     LiveKitRoom,
-    GridLayout,
-    ParticipantTile,
+    VideoConference,
     RoomAudioRenderer,
     ControlBar,
-    useTracks,
+    DisconnectButton,
 } from "@livekit/components-react";
 import "@livekit/components-styles";
-import { Track } from "livekit-client";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Video, Mic } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface LiveKitComponentProps {
     room: string;
@@ -20,6 +19,7 @@ interface LiveKitComponentProps {
 
 export default function LiveKitComponent({ room, username }: LiveKitComponentProps) {
     const [token, setToken] = useState("");
+    const [shouldConnect, setShouldConnect] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -37,47 +37,50 @@ export default function LiveKitComponent({ room, username }: LiveKitComponentPro
 
     if (token === "") {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+            <div className="flex flex-col items-center justify-center h-full text-muted-foreground bg-secondary/10 rounded-lg m-2">
                 <Loader2 className="h-8 w-8 animate-spin mb-2" />
-                <p>Connecting to secure server...</p>
+                <p className="text-xs">Preparing Token...</p>
             </div>
         );
     }
 
+    // Audio Context Fix: Require user interaction to start
+    if (!shouldConnect) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full gap-3 bg-secondary/10 rounded-lg p-4 text-center">
+                <p className="text-sm font-medium">Ready to join?</p>
+                <Button
+                    onClick={() => setShouldConnect(true)}
+                    size="sm"
+                    className="gap-2"
+                >
+                    <Video className="h-4 w-4" />
+                    Join Verification
+                </Button>
+            </div>
+        )
+    }
+
     return (
         <LiveKitRoom
-            video={true} // Start with video on
-            audio={true} // Start with audio on
+            video={true}
+            audio={true}
             token={token}
             serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
-            // Use the new simplified data attribute for theme
             data-lk-theme="default"
-            style={{ height: '100%' }}
+            style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
         >
-            <MyVideoConference />
+            {/* The standard VideoConference handles layout automatically */}
+            <div className="flex-1 relative overflow-hidden bg-black/80 rounded-lg border border-white/10 mx-2 mt-2">
+                <VideoConference />
+            </div>
+
             <RoomAudioRenderer />
-            {/* Remove ControlBar if you want custom controls, keeping for testing now */}
-            <ControlBar />
+
+            {/* Minimal Controls */}
+            <div className="p-2">
+                <ControlBar variation="minimal" controls={{ microphone: true, camera: true, chat: false, screenShare: false, leave: false }} />
+            </div>
         </LiveKitRoom>
-    );
-}
-
-function MyVideoConference() {
-    // Logic to show participants
-    const tracks = useTracks(
-        [
-            { source: Track.Source.Camera, withPlaceholder: true },
-            { source: Track.Source.ScreenShare, withPlaceholder: false },
-        ],
-        { onlySubscribed: false } // Show self too
-    );
-
-    return (
-        <GridLayout
-            tracks={tracks}
-            style={{ height: '100%' }} // Take full height of parent
-        >
-            <ParticipantTile />
-        </GridLayout>
     );
 }

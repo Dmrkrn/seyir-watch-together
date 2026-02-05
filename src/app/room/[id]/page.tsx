@@ -3,14 +3,17 @@ import { VideoPlayer } from "@/components/player/VideoPlayer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Copy, MessageSquare, Settings, Users } from "lucide-react";
+import LiveKitComponent from "@/components/livekit/LiveKitComponent";
 
 interface RoomPageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
-export default function RoomPage({ params }: RoomPageProps) {
+export default async function RoomPage(props: RoomPageProps) {
+    const params = await props.params;
+
     return (
         <div className="flex min-h-screen flex-col bg-background">
             {/* Top Bar for Room */}
@@ -50,13 +53,15 @@ export default function RoomPage({ params }: RoomPageProps) {
 
                 {/* Right Sidebar (Chat & Social) */}
                 <aside className="w-80 border-l bg-card hidden xl:flex flex-col">
+                    <div className="h-1/3 border-b relative">
+                        {/* LiveKit Video Conference Area */}
+                        <LiveKitComponent room={params.id} username={`User-${Math.floor(Math.random() * 1000)}`} />
+                    </div>
+
                     <div className="p-4 border-b flex items-center justify-between">
                         <h3 className="font-semibold flex items-center gap-2">
                             <MessageSquare className="h-4 w-4" /> Chat
                         </h3>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Users className="h-3 w-3" /> 4 Online
-                        </span>
                     </div>
 
                     {/* Chat Messages Placeholder */}
