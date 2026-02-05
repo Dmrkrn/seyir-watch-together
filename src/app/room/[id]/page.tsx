@@ -11,11 +11,18 @@ interface RoomPageProps {
     params: Promise<{
         id: string;
     }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function RoomPage(props: RoomPageProps) {
     const params = await props.params;
-    const randomUsername = `User-${Math.floor(Math.random() * 1000)}`;
+    const searchParams = await props.searchParams;
+
+    const usernameParam = searchParams.username;
+    // Handle array or string case, satisfy TS
+    const rawUsername = Array.isArray(usernameParam) ? usernameParam[0] : usernameParam;
+
+    const username = rawUsername || `User-${Math.floor(Math.random() * 1000)}`;
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
@@ -61,12 +68,12 @@ export default async function RoomPage(props: RoomPageProps) {
                 <aside className="w-80 border-l bg-card hidden xl:flex flex-col">
                     <div className="h-1/3 border-b relative">
                         {/* LiveKit Video Conference Area */}
-                        <LiveKitComponent room={params.id} username={randomUsername} />
+                        <LiveKitComponent room={params.id} username={username} />
                     </div>
 
                     {/* Chat Component */}
                     <div className="flex-1 overflow-hidden">
-                        <ChatComponent username={randomUsername} />
+                        <ChatComponent username={username} />
                     </div>
                 </aside>
             </div>
