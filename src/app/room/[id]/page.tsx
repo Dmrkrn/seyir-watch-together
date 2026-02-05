@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Copy, MessageSquare, Settings, Users } from "lucide-react";
 import LiveKitComponent from "@/components/livekit/LiveKitComponent";
+import { RoomSyncManager } from "@/components/room/RoomSyncManager";
 
 interface RoomPageProps {
     params: Promise<{
@@ -16,6 +17,9 @@ export default async function RoomPage(props: RoomPageProps) {
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
+            {/* Client-side Sync Logic */}
+            <RoomSyncManager roomId={params.id} />
+
             {/* Top Bar for Room */}
             <header className="flex h-14 items-center gap-4 border-b bg-background px-6">
                 <h1 className="text-lg font-semibold">Watch Party #{params.id || "Demo"}</h1>

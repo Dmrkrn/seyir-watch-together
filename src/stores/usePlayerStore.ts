@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { io, Socket } from 'socket.io-client'
 
 export interface VideoState {
     isPlaying: boolean;
@@ -10,6 +11,12 @@ export interface VideoState {
 }
 
 interface PlayerStore extends VideoState {
+    socket: Socket | null;
+    roomId: string | null;
+
+    connectSocket: (serverUrl: string, roomId: string) => void;
+    disconnectSocket: () => void;
+
     setPlaying: (playing: boolean) => void;
     setCurrentTime: (time: number) => void;
     setDuration: (duration: number) => void;
@@ -17,22 +24,55 @@ interface PlayerStore extends VideoState {
     toggleMute: () => void;
     setUrl: (url: string) => void;
 
-    // High-level Actions (connected to Sync Engine later)
+    // High-level Actions (connected to Sync Engine)
     play: () => void;
     pause: () => void;
     seekTo: (time: number) => void;
+    onRemoteUpdate: (type: 'play' | 'pause' | 'seek', time: number) => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set, get) => ({
     // Initial State
+    socket: null,
+    roomId: null,
     isPlaying: false,
     currentTime: 0,
     duration: 0,
     volume: 0.8,
     isMuted: false,
-    url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4", // Demo default
+    url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4",
 
-    // Setters
+    connectSocket: (serverUrl, roomId) => {
+        // Prevent multiple connections
+        if (get().socket) return;
+
+        console.log(`Connecting to Signaling Server: ${serverUrl} for room ${roomId}`);
+        const socket = io(serverUrl);
+        set({ socket, roomId });
+
+        socket.emit('join-room', roomId);
+
+        socket.on('connect', () => {
+            console.log('Connected to Sync Server');
+        });
+
+        socket.on('play', (time) => get().onRemoteUpdate('play', time));
+        socket.on('pause', (time) => get().onRemoteUpdate('pause', time));
+        socket.on('seek', (time) => get().onRemoteUpdate('seek', time));
+        socket.on('sync-state', (state) => {
+            // Initial sync when joining
+            console.log('Received initial state:', state);
+            if (state.currentTime) set({ currentTime: state.currentTime });
+            if (state.isPlaying !== undefined) set({ isPlaying: state.isPlaying });
+        });
+    },
+
+    disconnectSocket: () => {
+        get().socket?.disconnect();
+        set({ socket: null });
+    },
+
+    // Setters (Local Only)
     setPlaying: (playing) => set({ isPlaying: playing }),
     setCurrentTime: (time) => set({ currentTime: time }),
     setDuration: (duration) => set({ duration }),
@@ -40,17 +80,28 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
     setUrl: (url) => set({ url }),
 
-    // Actions
+    // Actions (Emits to Server)
     play: () => {
-        // TODO: Emit socket event 'play'
         set({ isPlaying: true });
+        const { socket, roomId, currentTime } = get();
+        if (socket && roomId) socket.emit('play', { roomId, currentTime });
     },
     pause: () => {
-        // TODO: Emit socket event 'pause'
         set({ isPlaying: false });
+        const { socket, roomId, currentTime } = get();
+        if (socket && roomId) socket.emit('pause', { roomId, currentTime });
     },
     seekTo: (time) => {
-        // TODO: Emit socket event 'seek' with timestamp
         set({ currentTime: time });
+        const { socket, roomId } = get();
+        if (socket && roomId) socket.emit('seek', { roomId, currentTime: time });
+    },
+
+    // Remote Updates (Does NOT emit back)
+    onRemoteUpdate: (type, time) => {
+        console.log(`Remote Update: ${type} at ${time}`);
+        if (type === 'play') set({ isPlaying: true, currentTime: time });
+        if (type === 'pause') set({ isPlaying: false, currentTime: time });
+        if (type === 'seek') set({ currentTime: time });
     }
 }))
