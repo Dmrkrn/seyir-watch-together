@@ -8,10 +8,22 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "3000:3000"
+      - "${APP_PORT:-3000}:3000"
     environment:
       - NEXT_PUBLIC_LIVEKIT_URL=${NEXT_PUBLIC_LIVEKIT_URL}
       - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
       - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
     env_file:
       - .env.local
+
+  signaling-server:
+    container_name: seyir-signaling
+    build:
+      context: .
+      dockerfile: Dockerfile.signaling
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - CORS_ORIGIN=*

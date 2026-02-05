@@ -4,12 +4,12 @@ const http = require("http");
 const server = http.createServer();
 const io = new Server(server, {
     cors: {
-        origin: "*", // Allow all origins for now (dev mode)
+        origin: process.env.CORS_ORIGIN || "*",
         methods: ["GET", "POST"]
     }
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 // Store room state in memory
 const roomStates = {};

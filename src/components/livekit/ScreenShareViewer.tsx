@@ -19,7 +19,7 @@ export function ScreenShareViewer() {
                 <h2 className="text-2xl font-bold mb-2">Sahne Boş</h2>
                 <p className="text-muted-foreground max-w-md">
                     Henüz kimse ekran paylaşmıyor. <br />
-                    Sağ alt köşedeki <Share className="inline h-4 w-4 mx-1" /> butonuna basarak ekranını paylaşabilirsin.
+                    Aşağıdaki <Share className="inline h-4 w-4 mx-1" /> butonuna basarak ekranını paylaşabilirsin.
                 </p>
 
                 <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground/60">
