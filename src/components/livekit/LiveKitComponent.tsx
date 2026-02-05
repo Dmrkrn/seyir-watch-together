@@ -10,14 +10,15 @@ import {
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
 import { Loader2, Video, Mic } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 interface LiveKitComponentProps {
     room: string;
     username: string;
+    children: React.ReactNode;
 }
 
-export default function LiveKitComponent({ room, username }: LiveKitComponentProps) {
+export default function LiveKitComponent({ room, username, children }: LiveKitComponentProps) {
     const [token, setToken] = useState("");
     const [shouldConnect, setShouldConnect] = useState(false);
 
@@ -37,25 +38,27 @@ export default function LiveKitComponent({ room, username }: LiveKitComponentPro
 
     if (token === "") {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-muted-foreground bg-secondary/10 rounded-lg m-2">
+            <div className="flex flex-col items-center justify-center h-full min-h-[50vh] text-muted-foreground bg-secondary/10 rounded-lg m-2">
                 <Loader2 className="h-8 w-8 animate-spin mb-2" />
-                <p className="text-xs">Preparing Token...</p>
+                <p className="text-xs">Oda Hazırlanıyor...</p>
             </div>
         );
     }
 
-    // Audio Context Fix: Require user interaction to start
     if (!shouldConnect) {
         return (
-            <div className="flex flex-col items-center justify-center h-full gap-3 bg-secondary/10 rounded-lg p-4 text-center">
-                <p className="text-sm font-medium">Ready to join?</p>
+            <div className="flex flex-col items-center justify-center h-full min-h-[80vh] gap-6 bg-background text-center p-8">
+                <div className="space-y-2">
+                    <h2 className="text-2xl font-bold">Odaya Katıl</h2>
+                    <p className="text-muted-foreground">Kamera ve mikrofon erişimi için onay verin.</p>
+                </div>
                 <Button
                     onClick={() => setShouldConnect(true)}
-                    size="sm"
+                    size="lg"
                     className="gap-2"
                 >
-                    <Video className="h-4 w-4" />
-                    Join Verification
+                    <Video className="h-5 w-5" />
+                    Odaya Gir
                 </Button>
             </div>
         )
@@ -70,17 +73,10 @@ export default function LiveKitComponent({ room, username }: LiveKitComponentPro
             data-lk-theme="default"
             style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
         >
-            {/* The standard VideoConference handles layout automatically */}
-            <div className="flex-1 relative overflow-hidden bg-black/80 rounded-lg border border-white/10 mx-2 mt-2">
-                <VideoConference />
-            </div>
-
             <RoomAudioRenderer />
+            {children}
 
-            {/* Minimal Controls */}
-            <div className="p-2">
-                <ControlBar variation="minimal" controls={{ microphone: true, camera: true, chat: false, screenShare: false, leave: false }} />
-            </div>
+            {/* Footer Removed - Controls moved to Layout */}
         </LiveKitRoom>
     );
 }

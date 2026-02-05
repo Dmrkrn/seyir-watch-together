@@ -69,6 +69,15 @@ io.on("connection", (socket) => {
         socket.to(roomId).emit("chat-message", { user, message, timestamp: Date.now() });
     });
 
+    // URL Change Handling
+    socket.on("change-url", ({ roomId, url }) => {
+        console.log(`[${roomId}] URL changed to: ${url}`);
+        // Reset to paused state so users must click Play (avoids Autoplay block)
+        roomStates[roomId] = { ...roomStates[roomId], url, currentTime: 0, isPlaying: false, lastUpdated: Date.now() };
+        // Broadcast to everyone (including sender to confirm/reset)
+        io.to(roomId).emit("change-url", url);
+    });
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });

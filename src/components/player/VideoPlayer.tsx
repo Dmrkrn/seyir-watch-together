@@ -48,6 +48,12 @@ export function VideoPlayer({ url: propUrl, onProgress: propOnProgress, onDurati
     const [playError, setPlayError] = useState(false); // Track autoplay failure
     const controlsTimeoutRef = useRef<NodeJS.Timeout>(null);
 
+    // Reset ready state when URL changes to show loader
+    useEffect(() => {
+        setReady(false);
+        setPlayError(false);
+    }, [url]);
+
     // Sync ReactPlayer with Store Time
     useEffect(() => {
         if (ready && playerRef.current && Math.abs(playerRef.current.getCurrentTime() - currentTime) > 1.0 && !seeking) {
@@ -101,55 +107,70 @@ export function VideoPlayer({ url: propUrl, onProgress: propOnProgress, onDurati
         >
             {/* The Player */}
             <ReactPlayer
+                key={url} // FORCE REMOUNT ON URL CHANGE
                 ref={playerRef}
                 url={url}
                 width="100%"
                 height="100%"
-                playing={isPlaying}
+                playing={ready && isPlaying} // CRITICAL FIX: Only play when ready to avoid AbortError
                 volume={volume}
                 muted={isMuted}
-                onReady={() => setReady(true)}
-                onDuration={(d) => setDuration(d)}
+                onReady={() => {
+                    setReady(true);
+                    // Safe initial duration check
+                    const d = playerRef.current?.getDuration();
+                    if (d) setDuration(d);
+                }}
                 onProgress={(state) => {
                     if (!seeking) {
                         // Optional: Sync store loosely if hosting
+                    }
+                    // Periodic duration check just in case
+                    if (!duration && playerRef.current) {
+                        setDuration(playerRef.current.getDuration());
                     }
                     if (propOnProgress) propOnProgress(state);
                 }}
                 onError={(e) => {
                     console.log("Player Error", e);
-                    // Standard way to catch autoplay errors isnt via onError prop for some players, 
-                    // but we can infer state mismatch easily.
+                    setPlayError(true); // Show overlay if autoplay fails
                 }}
                 controls={false}
                 config={{
-                    youtube: { playerVars: { showinfo: 0, disablekb: 1 } },
+                    youtube: { playerVars: { showinfo: 0, disablekb: 1, playsinline: 1, autoplay: 0 } },
                     file: {
                         attributes: {
                             // Try to catch play promise rejections if possible, but ReactPlayer hides them.
                             // We can rely on user interaction overlay below.
+                            controlsList: 'nodownload',
+                            playsInline: true,
+                            autoPlay: false
                         }
                     }
                 }}
             />
 
             {/* ERROR / START OVERLAY */}
-            {/* If we are supposed to be playing but haven't interacted, show big button */}
             {!ready && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60">
                     <Loader2 className="h-10 w-10 animate-spin text-white" />
                 </div>
             )}
 
-            {/* Play/Pause Overlay for click-to-start (if paused or error) */}
-            {!isPlaying && (
+            {/* Play/Pause Overlay for click-to-start (if paused or prevented) */}
+            {(!isPlaying || playError) && (
                 <div
                     className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 cursor-pointer"
-                    onClick={play}
+                    onClick={handlePlayPause}
                 >
                     <div className="bg-black/50 p-4 rounded-full backdrop-blur-sm hover:scale-110 transition-transform">
-                        <Play className="h-12 w-12 text-white fill-white" />
+                        {playError ? (
+                            <PlayCircle className="h-12 w-12 text-red-500 fill-white/20" />
+                        ) : (
+                            <Play className="h-12 w-12 text-white fill-white" />
+                        )}
                     </div>
+                    {playError && <p className="absolute mt-20 text-white font-bold text-sm bg-black/50 px-2 py-1 rounded">Click to Unmute/Play</p>}
                 </div>
             )}
 

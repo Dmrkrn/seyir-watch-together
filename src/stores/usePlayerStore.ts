@@ -31,7 +31,8 @@ interface PlayerStore extends VideoState {
     play: () => void;
     pause: () => void;
     seekTo: (time: number) => void;
-    onRemoteUpdate: (type: 'play' | 'pause' | 'seek', time: number) => void;
+    changeUrl: (url: string) => void;
+    onRemoteUpdate: (type: 'play' | 'pause' | 'seek' | 'url', data: any) => void;
 
     // Chat Actions
     sendMessage: (message: string, username: string) => void;
@@ -67,6 +68,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
         socket.on('play', (time) => get().onRemoteUpdate('play', time));
         socket.on('pause', (time) => get().onRemoteUpdate('pause', time));
         socket.on('seek', (time) => get().onRemoteUpdate('seek', time));
+        socket.on('change-url', (url) => get().onRemoteUpdate('url', url));
 
         // Listen for Chat
         socket.on('chat-message', (msg) => {
@@ -78,6 +80,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
             console.log('Received initial state:', state);
             if (state.currentTime) set({ currentTime: state.currentTime });
             if (state.isPlaying !== undefined) set({ isPlaying: state.isPlaying });
+            if (state.url) set({ url: state.url });
         });
     },
 
@@ -110,13 +113,22 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
         const { socket, roomId } = get();
         if (socket && roomId) socket.emit('seek', { roomId, currentTime: time });
     },
+    changeUrl: (url) => {
+        // Optimistic update? No, let's wait for server broadcast to keep everyone in sync 
+        // or update local then emit. 
+        // Let's emit first.
+        const { socket, roomId } = get();
+        if (socket && roomId) socket.emit('change-url', { roomId, url });
+    },
 
     // Remote Updates
-    onRemoteUpdate: (type, time) => {
-        console.log(`Remote Update: ${type} at ${time}`);
-        if (type === 'play') set({ isPlaying: true, currentTime: time });
-        if (type === 'pause') set({ isPlaying: false, currentTime: time });
-        if (type === 'seek') set({ currentTime: time });
+    onRemoteUpdate: (type, data) => {
+        console.log(`Remote Update: ${type}`, data);
+        if (type === 'play') set({ isPlaying: true, currentTime: data });
+        if (type === 'pause') set({ isPlaying: false, currentTime: data });
+        if (type === 'seek') set({ currentTime: data });
+        // Don't auto-play. Wait for user interaction.
+        if (type === 'url') set({ url: data, isPlaying: false, currentTime: 0 });
     },
 
     // Chat Actions

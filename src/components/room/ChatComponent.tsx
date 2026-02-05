@@ -32,8 +32,8 @@ export function ChatComponent({ username }: ChatComponentProps) {
     };
 
     return (
-        <div className="flex flex-col h-full bg-card border-l">
-            <div className="p-4 border-b flex items-center justify-between bg-card">
+        <div className="flex flex-col h-full bg-card border-l overflow-hidden">
+            <div className="p-4 border-b flex items-center justify-between bg-card shrink-0">
                 <h3 className="font-semibold flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" /> Sohbet
                 </h3>
@@ -84,7 +84,7 @@ export function ChatComponent({ username }: ChatComponentProps) {
             </div>
 
             {/* Input Area */}
-            <div className="p-3 border-t bg-background mt-auto">
+            <div className="p-3 border-t bg-background shrink-0">
                 <div className="flex gap-2">
                     <input
                         className="flex-1 bg-secondary/50 border-0 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none"
