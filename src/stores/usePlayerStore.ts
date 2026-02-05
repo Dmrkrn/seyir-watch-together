@@ -14,6 +14,9 @@ interface PlayerStore extends VideoState {
     socket: Socket | null;
     roomId: string | null;
 
+    // Chat State
+    messages: Array<{ user: string, message: string, timestamp: number, isMe?: boolean }>;
+
     connectSocket: (serverUrl: string, roomId: string) => void;
     disconnectSocket: () => void;
 
@@ -24,17 +27,22 @@ interface PlayerStore extends VideoState {
     toggleMute: () => void;
     setUrl: (url: string) => void;
 
-    // High-level Actions (connected to Sync Engine)
+    // High-level Actions (Video)
     play: () => void;
     pause: () => void;
     seekTo: (time: number) => void;
     onRemoteUpdate: (type: 'play' | 'pause' | 'seek', time: number) => void;
+
+    // Chat Actions
+    sendMessage: (message: string, username: string) => void;
+    addMessage: (msg: { user: string, message: string, timestamp: number, isMe?: boolean }) => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set, get) => ({
     // Initial State
     socket: null,
     roomId: null,
+    messages: [], // Initialize messages
     isPlaying: false,
     currentTime: 0,
     duration: 0,
@@ -59,6 +67,12 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
         socket.on('play', (time) => get().onRemoteUpdate('play', time));
         socket.on('pause', (time) => get().onRemoteUpdate('pause', time));
         socket.on('seek', (time) => get().onRemoteUpdate('seek', time));
+
+        // Listen for Chat
+        socket.on('chat-message', (msg) => {
+            get().addMessage({ ...msg, isMe: false });
+        });
+
         socket.on('sync-state', (state) => {
             // Initial sync when joining
             console.log('Received initial state:', state);
@@ -80,7 +94,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
     setUrl: (url) => set({ url }),
 
-    // Actions (Emits to Server)
+    // Actions (Video)
     play: () => {
         set({ isPlaying: true });
         const { socket, roomId, currentTime } = get();
@@ -97,11 +111,25 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
         if (socket && roomId) socket.emit('seek', { roomId, currentTime: time });
     },
 
-    // Remote Updates (Does NOT emit back)
+    // Remote Updates
     onRemoteUpdate: (type, time) => {
         console.log(`Remote Update: ${type} at ${time}`);
         if (type === 'play') set({ isPlaying: true, currentTime: time });
         if (type === 'pause') set({ isPlaying: false, currentTime: time });
         if (type === 'seek') set({ currentTime: time });
+    },
+
+    // Chat Actions
+    sendMessage: (message, username) => {
+        const { socket, roomId } = get();
+        if (socket && roomId) {
+            socket.emit('chat-message', { roomId, message, user: username });
+            // Add locally immediately (optimistic)
+            get().addMessage({ user: username, message, timestamp: Date.now(), isMe: true });
+        }
+    },
+    addMessage: (msg) => {
+        // Keep only last 50 messages
+        set((state) => ({ messages: [...state.messages, msg].slice(-50) }));
     }
 }))

@@ -62,6 +62,13 @@ io.on("connection", (socket) => {
         }
     });
 
+    // Chat Handling
+    socket.on("chat-message", ({ roomId, message, user }) => {
+        console.log(`[${roomId}] Chat from ${user}: ${message}`);
+        // Broadcast to everyone ELSE (sender adds locally)
+        socket.to(roomId).emit("chat-message", { user, message, timestamp: Date.now() });
+    });
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });

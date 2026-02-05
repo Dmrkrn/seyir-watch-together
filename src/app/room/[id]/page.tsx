@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Copy, MessageSquare, Settings, Users } from "lucide-react";
 import LiveKitComponent from "@/components/livekit/LiveKitComponent";
 import { RoomSyncManager } from "@/components/room/RoomSyncManager";
+import { ChatComponent } from "@/components/room/ChatComponent";
 
 interface RoomPageProps {
     params: Promise<{
@@ -14,6 +15,7 @@ interface RoomPageProps {
 
 export default async function RoomPage(props: RoomPageProps) {
     const params = await props.params;
+    const randomUsername = `User-${Math.floor(Math.random() * 1000)}`;
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
@@ -59,49 +61,12 @@ export default async function RoomPage(props: RoomPageProps) {
                 <aside className="w-80 border-l bg-card hidden xl:flex flex-col">
                     <div className="h-1/3 border-b relative">
                         {/* LiveKit Video Conference Area */}
-                        <LiveKitComponent room={params.id} username={`User-${Math.floor(Math.random() * 1000)}`} />
+                        <LiveKitComponent room={params.id} username={randomUsername} />
                     </div>
 
-                    <div className="p-4 border-b flex items-center justify-between">
-                        <h3 className="font-semibold flex items-center gap-2">
-                            <MessageSquare className="h-4 w-4" /> Chat
-                        </h3>
-                    </div>
-
-                    {/* Chat Messages Placeholder */}
-                    <div className="flex-1 p-4 space-y-4 overflow-y-auto">
-                        <div className="flex gap-2">
-                            <div className="h-8 w-8 rounded-full bg-green-500 shrink-0" />
-                            <div className="space-y-1">
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-sm font-semibold">Jane Doe</span>
-                                    <span className="text-[10px] text-muted-foreground">12:42</span>
-                                </div>
-                                <p className="text-sm text-foreground/90 bg-muted p-2 rounded-r-lg rounded-bl-lg">
-                                    This movie is awesome! 🍿
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex gap-2 flex-row-reverse">
-                            <div className="h-8 w-8 rounded-full bg-blue-500 shrink-0" />
-                            <div className="space-y-1 items-end flex flex-col">
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-[10px] text-muted-foreground">12:43</span>
-                                    <span className="text-sm font-semibold">You</span>
-                                </div>
-                                <p className="text-sm text-primary-foreground bg-primary p-2 rounded-l-lg rounded-br-lg text-right">
-                                    Wait for the plot twist...
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Chat Input Placeholder */}
-                    <div className="p-4 border-t mt-auto">
-                        <input
-                            className="w-full bg-secondary/50 border-0 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none"
-                            placeholder="Type a message..."
-                        />
+                    {/* Chat Component */}
+                    <div className="flex-1 overflow-hidden">
+                        <ChatComponent username={randomUsername} />
                     </div>
                 </aside>
             </div>
