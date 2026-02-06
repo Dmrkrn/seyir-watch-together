@@ -102,16 +102,17 @@ export function DraggableParticipantStrip() {
             )}
 
             {/* Collapse/Expand Button */}
+            {/* Collapse/Expand Button */}
             <button
                 onClick={(e) => {
                     e.stopPropagation(); // Don't drag when clicking button
                     setIsMinimized(!isMinimized);
                 }}
-                className="relative z-10 bg-black/80 rounded-full p-0.5 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer mb-1"
+                className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 bg-black/80 rounded-full w-5 h-5 flex items-center justify-center border border-white/20 hover:bg-white/20 transition-colors cursor-pointer shadow-sm"
                 title={isMinimized ? "Göster" : "Gizle"}
                 onMouseDown={(e) => e.stopPropagation()}
             >
-                {isMinimized ? <ChevronUp className="w-4 h-4 text-white" /> : <ChevronDown className="w-4 h-4 text-white" />}
+                {isMinimized ? <ChevronUp className="w-3 h-3 text-white" /> : <ChevronDown className="w-3 h-3 text-white" />}
             </button>
 
             {/* Video Strip (Hidden if minimized) */}
