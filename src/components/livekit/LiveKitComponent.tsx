@@ -70,17 +70,17 @@ export default function LiveKitComponent({ room, username, children }: LiveKitCo
             audio={true}
             token={token}
             serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
-            data-lk-theme="default"
-            style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+            adaptiveStream={true}
+            dynacast={true}
+            style={{ height: '100%' }}
             screenShareCaptureDefaults={{
                 resolution: { width: 1920, height: 1080, frameRate: 60 },
                 audio: true,
             }}
             publishDefaults={{
-                videoSimulcastLayers: [
-                    { width: 1920, height: 1080, encoding: { maxBitrate: 8000000, maxFramerate: 60 } },
-                    { width: 1280, height: 720, encoding: { maxBitrate: 3000000, maxFramerate: 30 } },
-                ],
+                videoCodec: 'vp8',
+                videoContentHint: 'motion',
+                screenShareSimulcast: false, // KRİTİK: WatchParty gibi L1T1 moduna geçer
                 screenShareEncoding: {
                     maxBitrate: 8000000,
                     maxFramerate: 60,
