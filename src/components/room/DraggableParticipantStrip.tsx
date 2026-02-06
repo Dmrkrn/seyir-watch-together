@@ -90,18 +90,15 @@ export function DraggableParticipantStrip() {
             }}
             onMouseDown={handleMouseDown}
         >
-            {/* Resize Handle (Top Edge) */}
+            {/* Resize Handle (Invisible/Hover Area) */}
             {!isMinimized && (
                 <div
-                    className="resize-handle absolute -top-2 left-0 right-0 h-4 cursor-ns-resize flex justify-center items-center group/handle opacity-0 hover:opacity-100 transition-opacity"
+                    className="resize-handle absolute -top-4 left-0 right-0 h-4 cursor-ns-resize flex justify-center items-center z-10"
                     onMouseDown={handleResizeMouseDown}
                     title="Boyutlandırmak için sürükle"
-                >
-                    <div className="w-16 h-1 bg-white/40 rounded-full shadow-lg" />
-                </div>
+                />
             )}
 
-            {/* Collapse/Expand Button */}
             {/* Collapse/Expand Button */}
             <button
                 onClick={(e) => {
