@@ -55,22 +55,23 @@ export function DraggableParticipantStrip() {
         <div
             className="absolute z-50 flex flex-col items-center gap-1 p-2 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 transition-all duration-300"
             style={{
-                transform: `translate(${position.x}px, ${position.y}px)`,
-                bottom: "100px", // Initial position
+                transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)`,
+                bottom: "100px",
                 left: "50%",
-                marginLeft: "-150px", // Approximate half width centering
                 cursor: isDragging ? "grabbing" : "default"
             }}
         >
-            {/* Drag Area (Invisible but functional header) */}
+            {/* Drag Area (Functional header) */}
             <div
-                className="w-full h-6 absolute top-0 left-0 cursor-grab active:cursor-grabbing z-10"
+                className="w-full h-8 absolute top-0 left-0 cursor-grab active:cursor-grabbing z-10 flex items-center justify-center hover:bg-white/5 transition-colors rounded-t-xl"
                 onMouseDown={handleMouseDown}
                 title="Sürüklemek için tut"
-            />
+            >
+                <GripHorizontal className="text-white/20 w-8 h-8" />
+            </div>
 
             {/* Video Strip */}
-            <div className="flex gap-2 overflow-x-auto max-w-[80vw] p-1 mt-2 relative z-0">
+            <div className="flex flex-nowrap gap-2 overflow-x-auto max-w-[80vw] p-1 mt-8 relative z-0 scrollbar-hide">
                 {tracks.map((track) => (
                     <div key={track.publication.trackSid} className="h-32 w-48 relative shrink-0 rounded-md overflow-hidden bg-black shadow-lg border border-white/5">
                         <ParticipantWithVolume trackRef={track} />

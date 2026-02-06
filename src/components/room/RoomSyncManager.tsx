@@ -8,12 +8,7 @@ export function RoomSyncManager({ roomId }: { roomId: string }) {
 
     useEffect(() => {
         // Connect to the separate Signaling Server process
-        const envUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
-        console.log("DEBUG: Env Var NEXT_PUBLIC_SOCKET_URL:", envUrl);
-
-        const socketUrl = envUrl || "http://localhost:4000";
-        console.log("DEBUG: Resolved socketUrl:", socketUrl);
-
+        const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
         connectSocket(socketUrl, roomId);
 
         return () => {
