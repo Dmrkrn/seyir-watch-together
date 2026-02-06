@@ -4,6 +4,8 @@
 
 Next.js, Socket.IO ve LiveKit kullanılarak geliştirilmiş hibrit bir mimariye sahiptir.
 
+![Seyir Banner](public/screenshots/main.JPG)
+
 <div align="center">
 
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
