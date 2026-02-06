@@ -78,7 +78,7 @@ export default function LiveKitComponent({ room, username, children }: LiveKitCo
                 audio: true,
             }}
             publishDefaults={{
-                videoCodec: 'vp8',
+                videoCodec: 'h264', // KRİTİK: L1T1 zorlamak için en iyi codec
                 videoContentHint: 'motion',
                 screenShareSimulcast: false, // KRİTİK: WatchParty gibi L1T1 moduna geçer
                 screenShareEncoding: {
