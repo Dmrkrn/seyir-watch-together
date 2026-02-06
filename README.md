@@ -39,10 +39,11 @@
 Uygulama hibrit bir yapı kullanır. WebRTC tabanlı medya (ses/video) iletişimi için LiveKit, oda senkronizasyonu ve mesajlaşma için WebSocket (Socket.IO) kullanılır.
 
 ```mermaid
-graph TD
+graph LR
     User[👤 Kullanıcı / User]
     
     subgraph Frontend [🌐 Next.js Client]
+        direction TB
         UI[Arayüz / UI]
         VideoPlayer[Video Oynatıcı]
         Chat[Sohbet Paneli]
@@ -50,28 +51,35 @@ graph TD
     end
 
     subgraph Backend [☁️ Sunucu Hizmetleri]
+        direction TB
         Signaling[📡 Socket.IO Server]
         MediaServer[🎥 LiveKit SFU]
         DB[(🗄️ Redis Adapter)]
     end
 
     User --> UI
-    UI --> VideoPlayer
-    UI --> Chat
     
-    %% Connections
+    %% Internal UI
+    UI -.-> VideoPlayer
+    UI -.-> Chat
+    UI -.-> MediaStream
+
+    %% Network Connections
     Chat <-->|WebSocket| Signaling
     VideoPlayer <-->|Sync Events| Signaling
-    Signaling <-->|Pub/Sub| DB
-    
     MediaStream <-->|"WebRTC (UDP/TCP)"| MediaServer
-    MediaServer -->|"SFU Stream"| UI
     
-    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef server fill:#bbf,stroke:#333,stroke-width:2px;
-    classDef media fill:#bfb,stroke:#333,stroke-width:2px;
+    %% Backend Internal
+    Signaling <-->|Pub/Sub| DB
+
+    %% Styles
+    classDef user fill:#ffffff,stroke:#333,stroke-width:2px,rx:10,ry:10;
+    classDef client fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,rx:5,ry:5;
+    classDef server fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,rx:5,ry:5;
+    classDef media fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,rx:5,ry:5;
     
-    class Frontend client;
+    class User user;
+    class UI,VideoPlayer,Chat,MediaStream client;
     class Signaling,DB server;
     class MediaServer media;
 ```
