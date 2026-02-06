@@ -108,10 +108,7 @@ export function RoomLayout({ roomId, username }: RoomLayoutProps) {
                         ref={mainRef}
                         className="flex-1 flex flex-col p-4 md:p-6 bg-black/5 overflow-hidden justify-center relative group"
                     >
-                        {/* Resizable Container for Screen Share */}
-                        <div className="relative flex justify-center items-center w-full h-full max-w-full max-h-full overflow-hidden resize-none md:resize p-1" style={{ minHeight: '300px' }}>
-                            <ScreenShareViewer />
-                        </div>
+                        <ScreenShareViewer />
 
                         {/* Draggable Floating Participant Bar (Only in Fullscreen) */}
                         {isFullscreen && <DraggableParticipantStrip />}
