@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Seyir | Watch Together 🎬
 
-## Getting Started
+**Seyir**, arkadaşlarınızla aynı anda video izlemenizi, sohbet etmenizi ve gerçek zamanlı etkileşimde bulunmanızı sağlayan modern bir "Birlikte İzle" (Watch Party) uygulamasıdır. 
 
-First, run the development server:
+Next.js, Socket.IO ve LiveKit kullanılarak geliştirilmiş hibrit bir mimariye sahiptir.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Seyir Banner](https://github.com/user-attachments/assets/placeholder)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌟 Özellikler
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Senkronize Video Oynatma**: Videoyu durdurduğunuzda, sardığınızda veya oynattığınızda odadaki herkes için anında senkronize olur.
+- **Gerçek Zamanlı Sohbet**: Odadaki arkadaşlarınızla anlık mesajlaşın.
+- **Sesli ve Görüntülü Görüşme (LiveKit)**: Sadece mesajlaşmakla kalmayın, arkadaşlarınızı görerek tepkilerini canlı izleyin.
+- **Ekran Paylaşımı**: Kendi ekranınızdaki herhangi bir içeriği odaya yansıtın.
+- **Sinema Modu**: Işıkları kapatın ve sadece filme odaklanın.
+- **Özel Odalar**: Size özel oluşturulan oda kodları ile davetsiz misafirlerden uzak durun.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Teknoloji Yığını
 
-## Learn More
+Bu proje, performans ve gerçek zamanlı iletişim için en modern teknolojileri bir araya getirir:
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: [Next.js 14](https://nextjs.org/) (App Router), TypeScript, Tailwind CSS
+- **Backend (Signaling)**: Node.js, Socket.IO (DigitalOcean üzerinde Dockerize edilmiş)
+- **Real-time Media**: [LiveKit](https://livekit.io/) (WebRTC tabanlı ses/video)
+- **Deployment**: Vercel (Frontend) + DigitalOcean (Backend)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 Neden Vercel Domain?
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Projemizin frontend tarafı **seyir-watch-together.vercel.app** adresi üzerinden hizmet vermektedir. 
 
-## Deploy on Vercel
+Projemiz **Açık Kaynak (Open Source)** felsefesiyle geliştirildiği için, herkesin ücretsiz ve hızlı bir şekilde kendi kopyasını kurabilmesini hedefledik. Bu nedenle frontend tarafında özel bir domain ("katı" bir kurumsal yapı) satın almak yerine, geliştirici dostu ve ücretsiz olan Vercel altyapısını tercih ettik. Backend tarafında ise güvenli iletişim (SSL) için kendi sunucumuzu yapılandırdık.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Amacımız ticari bir ürün satmak değil, **teknolojiyi ve eğlenceyi herkes için erişilebilir kılmaktır.**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📸 Ekran Görüntüleri
+
+### Karşılama Ekranı
+Modern ve sade arayüz ile saniyeler içinde yeni bir oda oluşturun.
+![Landing Page](public/screenshots/main.JPG)
+
+### İzleme Odası
+Videolar tam senkronize, sohbet ve katılımcı listesi elinizin altında.
+![Room View](public/screenshots/scene1.JPG)
+
+### Sinema Modu
+![Cinema Mode](public/screenshots/scene2.JPG)
+
+## 🛠️ Kurulum (Local)
+
+Kendi bilgisayarınızda çalıştırmak için:
+
+1.  Repoyu klonlayın:
+    ```bash
+    git clone https://github.com/Dmrkrn/seyir-watch-together.git
+    cd seyir-watch-together
+    ```
+
+2.  Paketleri yükleyin:
+    ```bash
+    npm install
+    ```
+
+3.  Gerekli `.env` dosyalarını oluşturun ve projeyi başlatın:
+    ```bash
+    npm run dev
+    ```
+
+## 📄 Lisans
+
+Bu proje MIT lisansı ile lisanslanmıştır. Dilediğiniz gibi kullanabilir, geliştirebilir ve dağıtabilirsiniz.
+
+---
+*Developed with ❤️ by Çağrı Demirkıran*
