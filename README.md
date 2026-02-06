@@ -13,6 +13,8 @@
 
 </div>
 
+![Seyir Banner](public/screenshots/main.JPG)
+
 > **[🚀 Hemen Ücretsiz Kullanın / Try for Free: https://seyir-watch-together.vercel.app/](https://seyir-watch-together.vercel.app/)**
 > *Kayıt olmadan, ücretsiz ve reklamsız. / No registration, free and ad-free.*
 
@@ -62,8 +64,8 @@ graph TD
     VideoPlayer <-->|Sync Events| Signaling
     Signaling <-->|Pub/Sub| DB
     
-    MediaStream <-->|WebRTC (UDP/TCP)| MediaServer
-    MediaServer -->|SFU Stream| UI
+    MediaStream <-->|"WebRTC (UDP/TCP)"| MediaServer
+    MediaServer -->|"SFU Stream"| UI
     
     classDef client fill:#f9f,stroke:#333,stroke-width:2px;
     classDef server fill:#bbf,stroke:#333,stroke-width:2px;
