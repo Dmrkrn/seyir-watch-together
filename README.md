@@ -1,10 +1,6 @@
 # Seyir | Watch Together 🎬
 
-**Seyir**, arkadaşlarınızla aynı anda video izlemenizi, sohbet etmenizi ve gerçek zamanlı etkileşimde bulunmanızı sağlayan modern bir "Birlikte İzle" (Watch Party) uygulamasıdır. 
-
-Next.js, Socket.IO ve LiveKit kullanılarak geliştirilmiş hibrit bir mimariye sahiptir.
-
-![Seyir Banner](public/screenshots/main.JPG)
+**Seyir**, arkadaşlarınızla aynı anda video izlemenizi, sohbet etmenizi ve gerçek zamanlı etkileşimde bulunmanızı sağlayan modern bir "Birlikte İzle" (Watch Party) uygulamasıdır.
 
 <div align="center">
 
@@ -17,74 +13,169 @@ Next.js, Socket.IO ve LiveKit kullanılarak geliştirilmiş hibrit bir mimariye 
 
 </div>
 
-> **[🚀 Hemen Ücretsiz Kullanın: https://seyir-watch-together.vercel.app/](https://seyir-watch-together.vercel.app/)**
-> *Kayıt olmadan, ücretsiz ve reklamsız.*
+> **[🚀 Hemen Ücretsiz Kullanın / Try for Free: https://seyir-watch-together.vercel.app/](https://seyir-watch-together.vercel.app/)**
+> *Kayıt olmadan, ücretsiz ve reklamsız. / No registration, free and ad-free.*
 
-## 🌟 Özellikler
+[🇹🇷 Türkçe](#-türkçe) • [🇺🇸 English](#-english)
+
+---
+
+## 🇹🇷 Türkçe
+
+### 🌟 Özellikler
 
 - **Senkronize Video Oynatma**: Videoyu durdurduğunuzda, sardığınızda veya oynattığınızda odadaki herkes için anında senkronize olur.
 - **Sinema Modu (Tam Ekran)**: Filmi tam ekran yaptığınızda arkadaşlarınızın görüntüleri kaybolmaz! Kayan pencere sayesinde hem filmi tam ekran izleyebilir hem de arkadaşlarınızın tepkilerini görmeye devam edebilirsiniz.
   > *Arkadaşlarınızın kamerasını ekranın istediğiniz yerine sürükleyip bırakabilirsiniz.*
-  ![Cinema Mode](public/screenshots/fullscreen.JPG)
-
 - **Sesli ve Görüntülü Görüşme (LiveKit)**: Sadece mesajlaşmakla kalmayın, arkadaşlarınızı görerek tepkilerini canlı izleyin.
 - **Gerçek Zamanlı Sohbet**: Odadaki arkadaşlarınızla anlık mesajlaşın.
 - **Ekran Paylaşımı**: Kendi ekranınızdaki herhangi bir içeriği odaya yansıtın.
 - **Özel Odalar**: Size özel oluşturulan oda kodları ile davetsiz misafirlerden uzak durun.
 
-## 🚀 Teknoloji Yığını
+### 🏗️ Mimari
 
-Bu proje, performans ve gerçek zamanlı iletişim için en modern teknolojileri bir araya getirir:
+Uygulama hibrit bir yapı kullanır. WebRTC tabanlı medya (ses/video) iletişimi için LiveKit, oda senkronizasyonu ve mesajlaşma için WebSocket (Socket.IO) kullanılır.
 
-- **Frontend**: [Next.js 14](https://nextjs.org/) (App Router), TypeScript, Tailwind CSS
-- **Backend (Signaling)**: Node.js, Socket.IO (DigitalOcean üzerinde Dockerize edilmiş)
-- **Real-time Media**: [LiveKit](https://livekit.io/) (WebRTC tabanlı ses/video)
-- **Deployment**: Vercel (Frontend) + DigitalOcean (Backend)
+```mermaid
+graph TD
+    User[👤 Kullanıcı / User]
+    
+    subgraph Frontend [🌐 Next.js Client]
+        UI[Arayüz / UI]
+        VideoPlayer[Video Oynatıcı]
+        Chat[Sohbet Paneli]
+        MediaStream[Kamera/Mikrofon]
+    end
 
-## 🌐 Neden Vercel Domain?
+    subgraph Backend [☁️ Sunucu Hizmetleri]
+        Signaling[📡 Socket.IO Server]
+        MediaServer[🎥 LiveKit SFU]
+        DB[(🗄️ Redis Adapter)]
+    end
+
+    User --> UI
+    UI --> VideoPlayer
+    UI --> Chat
+    
+    %% Connections
+    Chat <-->|WebSocket| Signaling
+    VideoPlayer <-->|Sync Events| Signaling
+    Signaling <-->|Pub/Sub| DB
+    
+    MediaStream <-->|WebRTC (UDP/TCP)| MediaServer
+    MediaServer -->|SFU Stream| UI
+    
+    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef server fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef media fill:#bfb,stroke:#333,stroke-width:2px;
+    
+    class Frontend client;
+    class Signaling,DB server;
+    class MediaServer media;
+```
+
+### 🛠️ Teknolojiler
+
+| Kategori | Teknoloji | Açıklama |
+|----------|-----------|----------|
+| **Frontend** | [Next.js 14](https://nextjs.org/) | App Router ile modern React framework'ü. |
+| **Dil** | TypeScript | Tip güvenli kod geliştirme. |
+| **Styling** | TailwindCSS | Hızlı ve esnek stillendirme. |
+| **Realtime** | Socket.IO | Odalar arası anlık veri senkronizasyonu. |
+| **Medya** | LiveKit | WebRTC tabanlı yüksek kaliteli ses ve görüntü. |
+| **DevOps** | Docker | Konteyner tabanlı dağıtım. |
+| **Deploy** | Vercel & DigitalOcean | Frontend Vercel'de, Backend DigitalOcean'da dockerize. |
+
+### 📸 Ekran Görüntüleri
+
+| Karşılama Ekranı | İzleme Odası |
+|-----------------|--------------|
+| ![Landing Page](public/screenshots/main.JPG) | ![Room View](public/screenshots/scene1.JPG) |
+
+> **Sinema Modu:**
+> ![Cinema Mode](public/screenshots/fullscreen.JPG)
+
+### 🌐 Neden Vercel Domain?
 
 Projemizin frontend tarafı **seyir-watch-together.vercel.app** adresi üzerinden hizmet vermektedir. 
-
-Projemiz **Açık Kaynak (Open Source)** felsefesiyle geliştirildiği için, herkesin ücretsiz ve hızlı bir şekilde kendi kopyasını kurabilmesini hedefledik. Bu nedenle frontend tarafında özel bir domain ("katı" bir kurumsal yapı) satın almak yerine, geliştirici dostu ve ücretsiz olan Vercel altyapısını tercih ettik. Backend tarafında ise güvenli iletişim (SSL) için kendi sunucumuzu yapılandırdık.
-
+Projemiz **Açık Kaynak (Open Source)** felsefesiyle geliştirildiği için, herkesin ücretsiz ve hızlı bir şekilde kendi kopyasını kurabilmesini hedefledik. Backend tarafında ise güvenli iletişim (SSL) için kendi sunucumuzu yapılandırdık.
 Amacımız ticari bir ürün satmak değil, **teknolojiyi ve eğlenceyi herkes için erişilebilir kılmaktır.**
 
-## 📸 Ekran Görüntüleri
+### 🛠️ Kurulum (Local)
 
-### Karşılama Ekranı
-Modern ve sade arayüz ile saniyeler içinde yeni bir oda oluşturun.
-![Landing Page](public/screenshots/main.JPG)
-
-### İzleme Odası
-Videolar tam senkronize, sohbet ve katılımcı listesi elinizin altında.
-![Room View](public/screenshots/scene1.JPG)
-
-### Sinema Modu
-![Cinema Mode](public/screenshots/scene2.JPG)
-
-## 🛠️ Kurulum (Local)
-
-Kendi bilgisayarınızda çalıştırmak için:
-
-1.  Repoyu klonlayın:
+1.  **Repoyu klonlayın:**
     ```bash
     git clone https://github.com/Dmrkrn/seyir-watch-together.git
     cd seyir-watch-together
     ```
 
-2.  Paketleri yükleyin:
+2.  **Paketleri yükleyin:**
     ```bash
     npm install
     ```
 
-3.  Gerekli `.env` dosyalarını oluşturun ve projeyi başlatın:
+3.  **Başlatın:**
     ```bash
     npm run dev
     ```
 
-## 📄 Lisans
+---
 
-Bu proje MIT lisansı ile lisanslanmıştır. Dilediğiniz gibi kullanabilir, geliştirebilir ve dağıtabilirsiniz.
+## 🇺🇸 English
+
+### 🌟 Features
+
+- **Synchronized Video Playback**: Pause, seek, or play, and it syncs instantly for everyone in the room.
+- **Cinema Mode (Fullscreen)**: Going fullscreen doesn't hide your friends! Drag and drop their video feeds anywhere on the screen while watching.
+- **Voice & Video Chat (LiveKit)**: Don't just text; see your friends' reactions live with high-quality WebRTC video.
+- **Real-time Chat**: Instant messaging with everyone in the room.
+- **Screen Sharing**: Share any content from your screen with the room.
+- **Private Rooms**: Secure, invite-only rooms with unique codes.
+
+### 🏗️ Architecture
+
+The app uses a hybrid architecture. LiveKit handles WebRTC-based media (audio/video), while Socket.IO manages room state synchronization and messaging.
+
+*(See the diagram in the Turkish section above)*
+
+### 🛠️ Tech Stack
+
+| Category | Technology | Description |
+|----------|------------|-------------|
+| **Frontend** | [Next.js 14](https://nextjs.org/) | Modern React framework with App Router. |
+| **Language** | TypeScript | Type-safe development. |
+| **Styling** | TailwindCSS | Utility-first CSS framework. |
+| **Realtime** | Socket.IO | Instant data sync and room management. |
+| **Media** | LiveKit | High-quality WebRTC audio/video infrastructure. |
+| **DevOps** | Docker | Containerized deployment. |
+
+### 📸 Screenshots
+
+*(See the screenshots in the Turkish section above)*
+
+### 🛠️ Installation (Local)
+
+1.  **Clone the repo:**
+    ```bash
+    git clone https://github.com/Dmrkrn/seyir-watch-together.git
+    cd seyir-watch-together
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Run:**
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. Feel free to use, modify, and distribute it as you wish.
 
 ---
 *Developed with ❤️ by Çağrı Demirkıran*
