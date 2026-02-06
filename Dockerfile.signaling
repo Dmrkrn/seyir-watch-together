@@ -1,0 +1,20 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json ./
+# We only need dependencies for the server, but package.json might include client deps.
+# Let's just install everything or if there is a separate package.json for server?
+# The user's structure seems to be a single repo.
+# Let's assume src/server/signaling.js allows running standalone if deps are installed.
+# But usually signaling server needs specific deps like socket.io/express.
+# Let's check src/server/signaling.js first to see dependencies.
+
+# For now, let's just copy everything and run the signaling script.
+COPY . .
+
+RUN npm install
+
+EXPOSE 4000
+
+CMD ["node", "src/server/signaling.js"]
