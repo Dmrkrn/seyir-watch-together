@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Copy, Settings, Video, Check, Maximize, Volume2, VolumeX, ChevronDown, ChevronUp } from "lucide-react";
+import { Copy, Settings, Video, Check, Maximize, Volume2, VolumeX, ChevronDown, ChevronUp, Github, Linkedin, Globe } from "lucide-react";
 import LiveKitComponent from "@/components/livekit/LiveKitComponent";
 import { ChatComponent } from "@/components/room/ChatComponent";
 import { SidebarGrid } from "@/components/room/SidebarGrid";
@@ -70,6 +70,19 @@ export function RoomLayout({ roomId, username }: RoomLayoutProps) {
                     <h1 className="text-lg font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
                         Seyir <span className="text-muted-foreground font-normal mx-2">|</span> Watch Together
                     </h1>
+
+                    {/* Social Links */}
+                    <div className="flex items-center gap-1 ml-4 border-l pl-4 border-white/10 opacity-70 hover:opacity-100 transition-opacity">
+                        <a href="https://github.com/Dmrkrn" target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-white/10 rounded-md transition-colors" title="GitHub">
+                            <Github className="h-4 w-4" />
+                        </a>
+                        <a href="https://www.linkedin.com/in/cagridmrkrn" target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-white/10 rounded-md transition-colors" title="LinkedIn">
+                            <Linkedin className="h-4 w-4" />
+                        </a>
+                        <a href="https://www.cagridemirkiran.com/" target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-white/10 rounded-md transition-colors" title="Website">
+                            <Globe className="h-4 w-4" />
+                        </a>
+                    </div>
 
                     <div className="ml-auto flex items-center gap-2">
                         {/* Room ID Badge */}
