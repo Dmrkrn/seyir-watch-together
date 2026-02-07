@@ -26,12 +26,12 @@
 
 ### 🌟 Özellikler
 
-- **Senkronize Video Oynatma**: Videoyu durdurduğunuzda, sardığınızda veya oynattığınızda odadaki herkes için anında senkronize olur.
+- **Yayıncı/İzleyici Modeli**: Bir kişi ekranını paylaşır, diğerleri izler. Gereksiz senkronizasyon yükü olmadan akıcı bir deneyim sunar.
 - **Sinema Modu (Tam Ekran)**: Filmi tam ekran yaptığınızda arkadaşlarınızın görüntüleri kaybolmaz! Kayan pencere sayesinde hem filmi tam ekran izleyebilir hem de arkadaşlarınızın tepkilerini görmeye devam edebilirsiniz.
   > *Arkadaşlarınızın kamerasını ekranın istediğiniz yerine sürükleyip bırakabilirsiniz.*
 - **Sesli ve Görüntülü Görüşme (LiveKit)**: Sadece mesajlaşmakla kalmayın, arkadaşlarınızı görerek tepkilerini canlı izleyin.
-- **Gerçek Zamanlı Sohbet**: Odadaki arkadaşlarınızla anlık mesajlaşın.
-- **Ekran Paylaşımı**: Kendi ekranınızdaki herhangi bir içeriği odaya yansıtın.
+- **Anlık Sohbet & İletişim**: Socket.IO üzerinden çalışan hızlı ve kesintisiz mesajlaşma.
+- **Ekran Paylaşımı**: Kendi ekranınızdaki herhangi bir içeriği odaya yansıtın (İzleyiciler için optimize edildi).
 - **Özel Odalar**: Size özel oluşturulan oda kodları ile davetsiz misafirlerden uzak durun.
 
 ### 🏗️ Mimari
@@ -135,11 +135,11 @@ Amacımız ticari bir ürün satmak değil, **teknolojiyi ve eğlenceyi herkes i
 
 ### 🌟 Features
 
-- **Synchronized Video Playback**: Pause, seek, or play, and it syncs instantly for everyone in the room.
+- **Broadcaster/Viewer Model**: One person shares, others watch. Smooth experience without unnecessary sync overhead.
 - **Cinema Mode (Fullscreen)**: Going fullscreen doesn't hide your friends! Drag and drop their video feeds anywhere on the screen while watching.
 - **Voice & Video Chat (LiveKit)**: Don't just text; see your friends' reactions live with high-quality WebRTC video.
-- **Real-time Chat**: Instant messaging with everyone in the room.
-- **Screen Sharing**: Share any content from your screen with the room.
+- **Chat & Communication**: Fast and seamless messaging powered by Socket.IO.
+- **Screen Sharing**: Share any content from your screen (Optimized for Viewer experience).
 - **Private Rooms**: Secure, invite-only rooms with unique codes.
 
 ### 🏗️ Architecture
