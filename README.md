@@ -15,7 +15,7 @@
 
 ![Seyir Banner](public/screenshots/main.JPG)
 
-> **[🚀 Hemen Ücretsiz Kullanın / Try for Free: https://seyir-watch-together.vercel.app/](https://seyir-watch-together.vercel.app/)**
+> **[🚀 Hemen Ücretsiz Kullanın / Try for Free: https://seyir.cagridemirkiran.com/](https://seyir.cagridemirkiran.com/)**
 > *Kayıt olmadan, ücretsiz ve reklamsız. / No registration, free and ad-free.*
 
 [🇹🇷 Türkçe](#-türkçe) • [🇺🇸 English](#-english)
@@ -107,7 +107,7 @@ graph LR
 
 ### 🌐 Neden Vercel Domain?
 
-Projemizin frontend tarafı **seyir-watch-together.vercel.app** adresi üzerinden hizmet vermektedir. 
+Projemizin frontend tarafı **seyir.cagridemirkiran.com** adresi üzerinden hizmet vermektedir. 
 Projemiz **Açık Kaynak (Open Source)** felsefesiyle geliştirildiği için, herkesin ücretsiz ve hızlı bir şekilde kendi kopyasını kurabilmesini hedefledik. Backend tarafında ise güvenli iletişim (SSL) için kendi sunucumuzu yapılandırdık.
 Amacımız ticari bir ürün satmak değil, **teknolojiyi ve eğlenceyi herkes için erişilebilir kılmaktır.**
 
