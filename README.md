@@ -105,10 +105,10 @@ graph LR
 > **Sinema Modu:**
 > ![Cinema Mode](public/screenshots/fullscreen.JPG)
 
-### 🌐 Neden Vercel Domain?
+### 🌐 Neden Kendi Sunucumuz?
 
 Projemizin frontend tarafı **seyir.cagridemirkiran.com** adresi üzerinden hizmet vermektedir. 
-Projemiz **Açık Kaynak (Open Source)** felsefesiyle geliştirildiği için, herkesin ücretsiz ve hızlı bir şekilde kendi kopyasını kurabilmesini hedefledik. Backend tarafında ise güvenli iletişim (SSL) için kendi sunucumuzu yapılandırdık.
+En iyi deneyimi sunabilmek için projeyi kendi sunucumuzda barındırıyoruz. Bu sayede **"Watch Party" (Birlikte İzle)** özelliğinde gerekli olan anlık senkronizasyon (Socket.IO) ve yüksek performanslı video aktarımı sorunsuz çalışmaktadır. Açık kaynak felsefesinden ödün vermeden, size hem ücretsiz hem de tam özellikli bir platform sunuyoruz.
 Amacımız ticari bir ürün satmak değil, **teknolojiyi ve eğlenceyi herkes için erişilebilir kılmaktır.**
 
 ### 🛠️ Kurulum (Local)
