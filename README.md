@@ -94,7 +94,7 @@ graph LR
 | **Realtime** | Socket.IO | Odalar arası anlık veri senkronizasyonu. |
 | **Medya** | LiveKit | WebRTC tabanlı yüksek kaliteli ses ve görüntü. |
 | **DevOps** | Docker | Konteyner tabanlı dağıtım. |
-| **Deploy** | Vercel & DigitalOcean | Frontend Vercel'de, Backend DigitalOcean'da dockerize. |
+| **Deploy** | DigitalOcean (VPS) | Docker ile tam izole, güvenli ve performanslı sunucu yapısı. |
 
 ### 📸 Ekran Görüntüleri
 
@@ -157,7 +157,7 @@ The app uses a hybrid architecture. LiveKit handles WebRTC-based media (audio/vi
 | **Styling** | TailwindCSS | Utility-first CSS framework. |
 | **Realtime** | Socket.IO | Instant data sync and room management. |
 | **Media** | LiveKit | High-quality WebRTC audio/video infrastructure. |
-| **DevOps** | Docker | Containerized deployment. |
+| **Deploy** | DigitalOcean (VPS) | Fully isolated, secure, and performant server structure with Docker. |
 
 ### 📸 Screenshots
 
