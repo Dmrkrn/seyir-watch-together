@@ -6,11 +6,45 @@ import {
     RoomAudioRenderer,
     ControlBar,
     DisconnectButton,
+    useLiveKitRoom,
 } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
 import { Loader2, Video, Mic } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
+
+function RoomConnectionHandler() {
+    const { room } = useLiveKitRoom();
+
+    useEffect(() => {
+        if (!room) return;
+
+        const onConnected = () => {
+            // Kamera ve Mikrofonu en düşük gecikme ve L1T1 (katmansız) modunda zorla
+            room.localParticipant.enableCameraAndMicrophone({
+                videoCodec: 'h264',
+                simulcast: true,
+                // @ts-ignore
+                videoEncoding: {
+                    maxBitrate: 1500000,
+                    maxFramerate: 30,
+                }
+            });
+        }
+
+        // Eğer zaten bağlıysa direkt çalıştır
+        if (room.state === 'connected') {
+            onConnected();
+        }
+
+        room.on('connected', onConnected);
+        return () => {
+            room.off('connected', onConnected);
+        }
+    }, [room]);
+
+    return null;
+}
 
 interface LiveKitComponentProps {
     room: string;
@@ -66,31 +100,35 @@ export default function LiveKitComponent({ room, username, children }: LiveKitCo
 
     return (
         <LiveKitRoom
-            video={true}
-            audio={true}
+            video={false} // Manüel yayınlayacağız
+            audio={false} // Manüel yayınlayacağız
             token={token}
             serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
-            adaptiveStream={true}
-            dynacast={true}
-            style={{ height: '100%' }}
-            screenShareCaptureDefaults={{
-                resolution: { width: 1920, height: 1080, frameRate: 60 },
-                audio: true,
-            }}
-            publishDefaults={{
-                videoCodec: 'h264', // KRİTİK: L1T1 zorlamak için en iyi codec
-                videoContentHint: 'motion',
-                screenShareSimulcast: false, // KRİTİK: WatchParty gibi L1T1 moduna geçer
-                screenShareEncoding: {
-                    maxBitrate: 8000000,
-                    maxFramerate: 60,
+            options={{
+                adaptiveStream: true,
+                dynacast: true,
+                publishDefaults: {
+                    videoCodec: 'h264',
+                    videoContentHint: 'motion',
+                    simulcast: true,
+                    screenShareEncoding: {
+                        maxBitrate: 4000000,
+                        maxFramerate: 30,
+                    }
+                },
+                screenShareCaptureDefaults: {
+                    resolution: { width: 1920, height: 1080, frameRate: 30 },
                 }
             }}
+            style={{ height: '100%' }}
+            onConnected={(room) => {
+                // Room bağlantısı sağlandığında tetiklenir
+                console.log("Room Connected:", room);
+            }}
         >
+            <RoomConnectionHandler />
             <RoomAudioRenderer />
             {children}
-
-            {/* Footer Removed - Controls moved to Layout */}
         </LiveKitRoom>
     );
 }

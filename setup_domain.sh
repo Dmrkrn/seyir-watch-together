@@ -39,3 +39,4 @@ echo -e "${GREEN}SSL Sertifikası alınıyor...${NC}"
 certbot --nginx --non-interactive --agree-tos -m $EMAIL -d $DOMAIN
 
 echo -e "${GREEN}🎉 Kurulum Tamamlandı! Artık https://$DOMAIN adresinden güvenli bağlantı sağlanabilir.${NC}"
+
