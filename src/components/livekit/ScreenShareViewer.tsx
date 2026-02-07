@@ -12,7 +12,7 @@ export function ScreenShareViewer() {
 
     if (!screenShareTrack) {
         return (
-            <div className="flex flex-col items-center justify-center h-full w-full bg-black/90 text-white border border-white/10 rounded-xl p-8 text-center animate-in fade-in zoom-in duration-500">
+            <div className="flex flex-col flex-1 min-h-0 w-full bg-black/90 text-white border border-white/10 rounded-xl p-8 items-center justify-center text-center animate-in fade-in zoom-in duration-500">
                 <div className="bg-secondary/20 p-6 rounded-full mb-4">
                     <Monitor className="h-16 w-16 text-muted-foreground/50" />
                 </div>

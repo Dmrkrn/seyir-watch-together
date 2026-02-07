@@ -19,17 +19,23 @@ function RoomConnectionHandler() {
     useEffect(() => {
         if (!room) return;
 
-        const onConnected = () => {
-            // Kamera ve Mikrofonu en düşük gecikme ve L1T1 (katmansız) modunda zorla
-            room.localParticipant.enableCameraAndMicrophone({
-                videoCodec: 'h264',
-                simulcast: true,
-                // @ts-ignore
-                videoEncoding: {
-                    maxBitrate: 1500000,
-                    maxFramerate: 30,
-                }
-            });
+        const onConnected = async () => {
+            console.log("Room Connected, enabling camera/mic...");
+            try {
+                // Kamera ve Mikrofonu en düşük gecikme ve L1T1 (katmansız) modunda zorla
+                await room.localParticipant.enableCameraAndMicrophone({
+                    videoCodec: 'h264',
+                    simulcast: true,
+                    // @ts-ignore
+                    videoEncoding: {
+                        maxBitrate: 1500000,
+                        maxFramerate: 30,
+                    }
+                });
+                console.log("Camera/Mic enabled successfully");
+            } catch (error) {
+                console.error("Failed to enable camera/mic:", error);
+            }
         }
 
         // Eğer zaten bağlıysa direkt çalıştır
@@ -121,10 +127,7 @@ export default function LiveKitComponent({ room, username, children }: LiveKitCo
                 }
             }}
             style={{ height: '100%' }}
-            onConnected={(room) => {
-                // Room bağlantısı sağlandığında tetiklenir
-                console.log("Room Connected:", room);
-            }}
+            className="flex flex-col flex-1 w-full h-full"
         >
             <RoomConnectionHandler />
             <RoomAudioRenderer />
