@@ -114,16 +114,16 @@ export default function LiveKitComponent({ room, username, children }: LiveKitCo
                 adaptiveStream: true,
                 dynacast: true,
                 publishDefaults: {
-                    videoCodec: 'h264',
+                    videoCodec: 'vp9',
                     videoContentHint: 'motion',
-                    simulcast: true,
+                    simulcast: false,
                     screenShareEncoding: {
-                        maxBitrate: 4000000,
-                        maxFramerate: 30,
+                        maxBitrate: 8000000,
+                        maxFramerate: 60,
                     }
                 },
                 screenShareCaptureDefaults: {
-                    resolution: { width: 1920, height: 1080, frameRate: 30 },
+                    resolution: { width: 1920, height: 1080, frameRate: 60 },
                 }
             }}
             style={{ height: '100%' }}
