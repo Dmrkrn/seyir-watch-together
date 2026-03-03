@@ -188,4 +188,3 @@ The app uses a hybrid architecture. LiveKit handles WebRTC-based media (audio/vi
 This project is licensed under the MIT License. Feel free to use, modify, and distribute it as you wish.
 
 ---
-*Developed with ❤️ by Çağrı Demirkıran*
